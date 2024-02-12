@@ -48,14 +48,14 @@ Here is the user information:
 {user_info}
 ---------------------
 
-Here is additional context that may be relevant to
-answer the user query:
+Here is a fragment of the Frequently Asked Questions (FAQ) guide
+that may be relevant to answer the user query:
 
 ---------------------
 {context}
 ---------------------
 
-Given the user info and the context, answer the following query.
+Given the user info and the FAQ guide, answer the following query.
 If there is not enough information, decline to answer.
 Do not output anything that can't be answered from the previous information.
 
@@ -164,22 +164,29 @@ so to deploy it you will need a corresponding API key.
 
 Read the
 [documentation](https://github.com/apiad/service-bot/blob/main/README.md)
-or [browse the code](https://github.com/apiad/service-bot) in Github.""",
-    )
+or [browse the code](https://github.com/apiad/service-bot) in Github.
 
-    add_message(
-        """In the sidebar you will find a set of user-defined values
-        that simulate a user account.
-        Change those values and ask something related to them to see the
-        chatbot in action.
+In the sidebar you will find a set of user-defined values
+that simulate a user account.
+Change those values and ask something related to them to see the
+chatbot in action.
         """
     )
 
+    reply(
+        """Greet the user and tell them,
+        in a single sentence, about your main service.""",
+        index,
+        name=name,
+        plan=plan,
+        credits=credits,
+    )
+
     add_message(
         """
-        Ready to answer your questions. If you don't know where to start,
+        I'm ready to answer your questions. If you don't know where to start,
         just ask me to suggest you some questions.
-            """
+        """
     )
 
 
