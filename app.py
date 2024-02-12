@@ -64,12 +64,12 @@ Answer:
 """
 
 
-def reply(query: str, index: IndexFlatL2, **user_data):
+def reply(query: str, index: IndexFlatL2, chunks, **user_data):
     embedding = embed(query)
     embedding = np.array([embedding])
 
     _, indexes = index.search(embedding, k=3)
-    context = [st.session_state.chunks[i] for i in indexes.tolist()[0]]
+    context = [chunks[i] for i in indexes.tolist()[0]]
 
     user_info = "\n".join(
         f"{key}: {value}" for key, value in user_data.items()
@@ -88,13 +88,16 @@ def reply(query: str, index: IndexFlatL2, **user_data):
     add_message(stream_response(response))
 
 
-@st.cache_resource
-def build_index():
+@st.cache_data
+def get_faq():
     with open("faq.md") as fp:
         text = fp.read()
 
-    chunks = [chunk.strip() for chunk in text.split("#") if chunk.strip()]
+    return [chunk.strip() for chunk in text.split("#") if chunk.strip()]
 
+
+@st.cache_resource
+def build_index(chunks):
     st.sidebar.info(f"Indexing {len(chunks)} chunks.")
     progress = st.sidebar.progress(0)
 
@@ -109,7 +112,6 @@ def build_index():
     index = IndexFlatL2(dimension)
     index.add(embeddings)
 
-    st.session_state.chunks = chunks
     return index
 
 
@@ -142,7 +144,8 @@ for message in st.session_state.messages:
         st.write(message["content"])
 
 
-index = build_index()
+chunks = get_faq()
+index = build_index(chunks)
 
 name = st.sidebar.text_input("Username", "Neo")
 plan = st.sidebar.selectbox("Plan", ["free", "premium", "enterprise"])
@@ -180,6 +183,7 @@ chatbot in action.
         """Greet the user and tell them,
         in a single sentence, about your main service.""",
         index,
+        chunks,
         name=name,
         plan=plan,
         credits=credits,
@@ -199,6 +203,7 @@ if query:
     reply(
         query,
         index,
+        chunks,
         name=name,
         plan=plan,
         credits=credits,

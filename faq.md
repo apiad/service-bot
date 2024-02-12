@@ -17,7 +17,7 @@ They can be used to access:
 
 - Access the API, so you can self-loath on your own services.
 - Unlock cosmetic features, such as colorful reminders of your failures.
-- Inflate one or more balloons, to breathe some air into your meaningless existence.
+- Inflate one or more balloons, which can infuse your meaningless existence with some air.
 
 # How much does the API cost?
 
@@ -29,4 +29,4 @@ We support all English-speaking countries. Countries where the main language is 
 
 # Do you offer discounts?
 
-We offer huge discounts for PhD students. They are already so deep into self-loathing that they can use our service for almost zero cost: we provide up to 90% discount if your dissertation has been rejected more than 3 times by the academic committee.
+We offer huge discounts for PhD students, because they are already so deep into self-loathing that they can use our service for almost zero cost. As such, we provide up to 90% discount if your dissertation has been rejected more than 3 times by the academic committee.
