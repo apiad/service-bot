@@ -26,3 +26,7 @@ The API costs $1 per call in the free plan, and $0 per call on the premium and e
 # What countries do you support?
 
 We support all English-speaking countries. Countries where the main language is not English are not supported.
+
+# Do you offer discounts?
+
+We offer huge discounts for PhD students. They are already so deep into self-loathing that they can use our service for almost zero cost: we provide up to 90% discount if your dissertation has been rejected more than 3 times by the academic committee.

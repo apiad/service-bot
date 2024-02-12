@@ -149,6 +149,9 @@ plan = st.sidebar.selectbox("Plan", ["free", "premium", "enterprise"])
 credits = st.sidebar.number_input(
     "Credits", 0.0, 1000.0, 100.0, format="%.2f"
 )
+profession = st.sidebar.selectbox(
+    "Profession", ["Engineer", "PhD student", "Other"]
+)
 
 query = st.chat_input("Ask something")
 
@@ -180,6 +183,7 @@ chatbot in action.
         name=name,
         plan=plan,
         credits=credits,
+        profession=profession,
     )
 
     add_message(
@@ -192,7 +196,14 @@ chatbot in action.
 
 if query:
     add_message(query, agent="human", stream=False)
-    reply(query, index, name=name, plan=plan, credits=credits)
+    reply(
+        query,
+        index,
+        name=name,
+        plan=plan,
+        credits=credits,
+        profession=profession,
+    )
 
     if "balloon" in query:
         st.balloons()
