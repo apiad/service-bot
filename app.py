@@ -6,7 +6,6 @@ import streamlit as st
 from faiss import IndexFlatL2
 from mistralai.client import MistralClient
 from mistralai.models.chat_completion import ChatMessage
-from pypdf import PdfReader
 
 
 st.set_page_config(
@@ -27,9 +26,7 @@ def add_message(msg, agent="ai", stream=True):
             output = msg
             st.write(msg)
 
-    st.session_state.messages.append(
-        dict(agent=agent, content=output)
-    )
+    st.session_state.messages.append(dict(agent=agent, content=output))
 
 
 @st.cache_resource
@@ -72,21 +69,21 @@ def reply(query: str, index: IndexFlatL2, **user_data):
     embedding = np.array([embedding])
 
     _, indexes = index.search(embedding, k=3)
-    context = [
-        st.session_state.chunks[i] for i in indexes.tolist()[0]
-    ]
+    context = [st.session_state.chunks[i] for i in indexes.tolist()[0]]
 
-    user_info = "\n".join(f"{key}: {value}" for key, value in user_data.items())
+    user_info = "\n".join(
+        f"{key}: {value}" for key, value in user_data.items()
+    )
 
     messages = [
         ChatMessage(
             role="user",
-            content=PROMPT.format(context=context, query=query, user_info=user_info),
+            content=PROMPT.format(
+                context=context, query=query, user_info=user_info
+            ),
         )
     ]
-    response = CLIENT.chat_stream(
-        model="mistral-small", messages=messages
-    )
+    response = CLIENT.chat_stream(model="mistral-small", messages=messages)
 
     add_message(stream_response(response))
 
@@ -129,11 +126,7 @@ def stream_response(response):
 
 @st.cache_data
 def embed(text: str):
-    return (
-        CLIENT.embeddings("mistral-embed", text)
-        .data[0]
-        .embedding
-    )
+    return CLIENT.embeddings("mistral-embed", text).data[0].embedding
 
 
 if st.sidebar.button("🔴 Reset conversation"):
@@ -181,13 +174,20 @@ index = build_index()
 
 name = st.sidebar.text_input("Username", "Neo")
 plan = st.sidebar.selectbox("Plan", ["free", "premium", "enterprise"])
-credits = st.sidebar.number_input("Credits", 0.0, 1000.0, 100.0, format="%.2f")
+credits = st.sidebar.number_input(
+    "Credits", 0.0, 1000.0, 100.0, format="%.2f"
+)
 
 query = st.chat_input("Ask something")
 
 
 if not st.session_state.messages:
-    add_message("Ready to answer your questions.")
+    add_message(
+        """
+        Ready to answer your questions. If you don't know where to start,
+                just ask me to suggest you some questions.
+            """
+    )
 
 
 if query:
