@@ -142,6 +142,16 @@ for message in st.session_state.messages:
         st.write(message["content"])
 
 
+index = build_index()
+
+name = st.sidebar.text_input("Username", "Neo")
+plan = st.sidebar.selectbox("Plan", ["free", "premium", "enterprise"])
+credits = st.sidebar.number_input(
+    "Credits", 0.0, 1000.0, 100.0, format="%.2f"
+)
+
+query = st.chat_input("Ask something")
+
 if not st.session_state.messages:
     add_message(
         """
@@ -166,26 +176,9 @@ or [browse the code](https://github.com/apiad/service-bot) in Github.""",
     )
 
     add_message(
-        "I'm ready to answer your questions",
-    )
-
-
-index = build_index()
-
-name = st.sidebar.text_input("Username", "Neo")
-plan = st.sidebar.selectbox("Plan", ["free", "premium", "enterprise"])
-credits = st.sidebar.number_input(
-    "Credits", 0.0, 1000.0, 100.0, format="%.2f"
-)
-
-query = st.chat_input("Ask something")
-
-
-if not st.session_state.messages:
-    add_message(
         """
         Ready to answer your questions. If you don't know where to start,
-                just ask me to suggest you some questions.
+        just ask me to suggest you some questions.
             """
     )
 
