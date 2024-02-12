@@ -2,9 +2,7 @@
 
 > A simple streamlit app showcasing how to build a customer service bot to help users of a hypothetical service
 
-## Check the app here
-
-<iframe width="100%" height="600px" src="https://service-bot-demo.streamlit.app/"></iframe>
+### > [Check the app here](https://service-bot-demo.streamlit.app/)
 
 ## Running
 
