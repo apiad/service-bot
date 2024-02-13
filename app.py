@@ -6,10 +6,7 @@ import numpy as np
 import streamlit as st
 from faiss import IndexFlatL2
 from mistralai.client import MistralClient
-from mistralai.models.chat_completion import (
-    ChatMessage,
-    ChatCompletionStreamResponse,
-)
+from mistralai.models.chat_completion import ChatMessage
 
 
 st.set_page_config(
@@ -26,7 +23,9 @@ def add_message(msg, role):
     with st.chat_message(role):
         output = st.write_stream(msg)
 
-    st.session_state.messages.append(dict(role=role, content=output))
+    st.session_state.messages.append(
+        dict(role=role, content=output)
+    )
 
 
 @st.cache_resource
@@ -83,7 +82,9 @@ def reply(query: str, index: IndexFlatL2, chunks, **user_data):
             ),
         )
     ]
-    response = CLIENT.chat_stream(model="mistral-small", messages=messages)
+    response = CLIENT.chat_stream(
+        model="mistral-small", messages=messages
+    )
 
     add_message(msg=stream_response(response), role="assistant")
 
@@ -93,7 +94,11 @@ def get_faq():
     with open("faq.md") as fp:
         text = fp.read()
 
-    return [chunk.strip() for chunk in text.split("#") if chunk.strip()]
+    return [
+        chunk.strip()
+        for chunk in text.split("#")
+        if chunk.strip()
+    ]
 
 
 @st.cache_resource
@@ -130,6 +135,7 @@ def stream_str(s, speed=25):
     if token:
         yield token
 
+
 def stream_response(response):
     for r in response:
         yield r.choices[0].delta.content
@@ -137,7 +143,11 @@ def stream_response(response):
 
 @st.cache_data
 def embed(text: str):
-    return CLIENT.embeddings("mistral-embed", text).data[0].embedding
+    return (
+        CLIENT.embeddings("mistral-embed", text)
+        .data[0]
+        .embedding
+    )
 
 
 if st.sidebar.button("🔴 Reset conversation"):
@@ -157,7 +167,9 @@ chunks = get_faq()
 index = build_index(chunks)
 
 name = st.sidebar.text_input("Username", "Neo")
-plan = st.sidebar.selectbox("Plan", ["free", "premium", "enterprise"])
+plan = st.sidebar.selectbox(
+    "Plan", ["free", "premium", "enterprise"]
+)
 credits = st.sidebar.number_input(
     "Credits", 0.0, 1000.0, 100.0, format="%.2f"
 )
@@ -202,7 +214,8 @@ chatbot in action.
 
     add_message(
         """
-        I'm ready to answer your questions. If you don't know where to start,
+        I'm ready to answer your questions.
+        If you don't know where to start,
         just ask me to suggest you some questions.
         """,
         "assistant",

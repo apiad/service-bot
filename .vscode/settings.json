@@ -1,6 +1,6 @@
 {
     "black-formatter.args": [
         "--line-length",
-        "75"
+        "65"
     ]
 }
