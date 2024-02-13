@@ -8,7 +8,7 @@ The available plans are:
 
 - **Free ($0 per month):** you can have access to basic SLaS functionality, such as periodical reminders of your insufficiency.
 - **Premium ($10 per month):** you can have access to advanced functionality, such as notifications of your friends' achievements. Plus, API calls are free.
-- **Enterprise ($100 per month):** you can have access to all the functionalities in the premium plan plus prioritized customer support, so you can always have someone to talk you down of your cloud whenever you're feeling too good about yourself.
+- **Enterprise ($100 per month):** you can have access to all the functionalities in the premium plan plus prioritized customer support, so you can always have someone to bring you down whenever you're feeling too good about yourself.
 
 # Can I use credits to buy a more advanced plan?
 

@@ -5,7 +5,10 @@ import numpy as np
 import streamlit as st
 from faiss import IndexFlatL2
 from mistralai.client import MistralClient
-from mistralai.models.chat_completion import ChatMessage, ChatCompletionStreamResponse
+from mistralai.models.chat_completion import (
+    ChatMessage,
+    ChatCompletionStreamResponse,
+)
 
 
 st.set_page_config(
@@ -15,7 +18,7 @@ st.set_page_config(
 )
 
 
-def add_message(msg, role="assistant", stream=True):
+def add_message(msg, role):
     if isinstance(msg, str):
         msg = stream_str(msg)
 
@@ -84,7 +87,7 @@ def reply(query: str, index: IndexFlatL2, chunks, **user_data):
     ]
     response = CLIENT.chat_stream(model="mistral-small", messages=messages)
 
-    add_message(stream_response(response))
+    add_message(msg=stream_response(response), role="assistant")
 
 
 @st.cache_data
@@ -175,7 +178,8 @@ In the sidebar you will find a set of user-defined values
 that simulate a user account.
 Change those values and ask something related to them to see the
 chatbot in action.
-        """
+        """,
+        "assistant",
     )
 
     reply(
@@ -193,12 +197,13 @@ chatbot in action.
         """
         I'm ready to answer your questions. If you don't know where to start,
         just ask me to suggest you some questions.
-        """
+        """,
+        "assistant",
     )
 
 
 if query:
-    add_message(query, agent="human", stream=False)
+    add_message(query, "user")
     reply(
         query,
         index,
