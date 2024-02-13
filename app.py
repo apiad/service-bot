@@ -1,6 +1,7 @@
 import os
 import time
 
+import string
 import numpy as np
 import streamlit as st
 from faiss import IndexFlatL2
@@ -75,9 +76,6 @@ def reply(query: str, index: IndexFlatL2, chunks, **user_data):
     )
 
     messages = [
-        # Uncomment to add chat history in the LLM request
-        ChatMessage(**m) for m in st.session_state.messages[-5:]
-    ] + [
         ChatMessage(
             role="user",
             content=PROMPT.format(
@@ -117,11 +115,20 @@ def build_index(chunks):
     return index
 
 
-def stream_str(s, speed=250):
+def stream_str(s, speed=25):
+    token = ""
     for c in s:
-        yield c
-        time.sleep(1 / speed)
+        if c in string.whitespace:
+            if token:
+                yield token
+                token = ""
+            yield c
+            time.sleep(1 / speed)
+        else:
+            token += c
 
+    if token:
+        yield token
 
 def stream_response(response):
     for r in response:
@@ -183,7 +190,7 @@ chatbot in action.
     )
 
     reply(
-        """Greet the user and tell them,
+        """Greet the user, introduce yourself, and tell the user,
         in a single sentence, about your main service.""",
         index,
         chunks,
