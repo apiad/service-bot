@@ -76,7 +76,7 @@ def reply(query: str, index: IndexFlatL2, chunks, **user_data):
 
     messages = [
         # Uncomment to add chat history in the LLM request
-        # ChatMessage(**m) for m in st.session_state.messages[-5:]
+        ChatMessage(**m) for m in st.session_state.messages[-5:]
     ] + [
         ChatMessage(
             role="user",
@@ -164,7 +164,7 @@ if not st.session_state.messages:
     add_message(
         """
 This is a simple demonstration of how to use a large language model
-and a vector database to implement a customer service bot that
+and a vector database to implement a customer service bot
 personalized with user data.
 
 This appplication uses [Mistral](https://mistral.ai) as language model,
