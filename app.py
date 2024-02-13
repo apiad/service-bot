@@ -5,7 +5,7 @@ import numpy as np
 import streamlit as st
 from faiss import IndexFlatL2
 from mistralai.client import MistralClient
-from mistralai.models.chat_completion import ChatMessage
+from mistralai.models.chat_completion import ChatMessage, ChatCompletionStreamResponse
 
 
 st.set_page_config(
@@ -15,18 +15,14 @@ st.set_page_config(
 )
 
 
-def add_message(msg, agent="ai", stream=True):
-    if stream and isinstance(msg, str):
+def add_message(msg, role="assistant", stream=True):
+    if isinstance(msg, str):
         msg = stream_str(msg)
 
-    with st.chat_message(agent):
-        if stream:
-            output = st.write_stream(msg)
-        else:
-            output = msg
-            st.write(msg)
+    with st.chat_message(role):
+        output = st.write_stream(msg)
 
-    st.session_state.messages.append(dict(agent=agent, content=output))
+    st.session_state.messages.append(dict(role=role, content=output))
 
 
 @st.cache_resource
@@ -76,6 +72,9 @@ def reply(query: str, index: IndexFlatL2, chunks, **user_data):
     )
 
     messages = [
+        # Uncomment to add chat history in the LLM request
+        # ChatMessage(**m) for m in st.session_state.messages[-5:]
+    ] + [
         ChatMessage(
             role="user",
             content=PROMPT.format(
@@ -140,7 +139,7 @@ if "messages" not in st.session_state:
 
 
 for message in st.session_state.messages:
-    with st.chat_message(message["agent"]):
+    with st.chat_message(message["role"]):
         st.write(message["content"])
 
 
